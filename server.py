@@ -155,6 +155,8 @@ def get_update_delete(id):
                 return jsonify(employee), 200
 
             elif request.method == "PUT":
+                employee = request.get_json()
+
                 cursor.execute(
                     """
                     SELECT id FROM tblEmployees WHERE id = %s
@@ -168,9 +170,30 @@ def get_update_delete(id):
                     """
                     UPDATE tblEmployees
                     SET
-
-                    """
+                        full_name   = %s,
+                        position    = %s,
+                        department  = %s,
+                        address     = %s,
+                        gender      = %s,
+                        email       = %s,
+                        contact_no  = %s,
+                        birth_date  = %s,
+                        date_hired  = %s
+                    WHERE id        = %s
+                    """,
+                    (
+                        employee.get("full_name"),
+                        employee.get("position"),
+                        employee.get("department"),
+                        employee.get("address"),
+                        employee.get("gender"),
+                        employee.get("email"),
+                        employee.get("contact_no"),
+                        employee.get("birth_date"),
+                        employee.get("date_hired")
+                    )
                 )
+                conn.commit()
 
             elif request.method == "DELETE": 
                 cursor.execute(
@@ -202,4 +225,4 @@ def get_update_delete(id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0",debug=True)

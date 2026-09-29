@@ -68,7 +68,6 @@ def get_add():
                 """
                 INSERT INTO tblEmployees
                     (
-                        id,
                         full_name,
                         position,
                         department,
@@ -80,7 +79,7 @@ def get_add():
                         date_hired
                     )
                 VALUES
-                    (%s, %s, %s, %s, %s, %s)
+                    (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """,
                 (
                     user_input.get("full_name"),
@@ -190,10 +189,15 @@ def get_update_delete(id):
                         employee.get("email"),
                         employee.get("contact_no"),
                         employee.get("birth_date"),
-                        employee.get("date_hired")
+                        employee.get("date_hired"),
+                        id
                     )
                 )
                 conn.commit()
+
+                return jsonify({
+                    "message": "Updated successfully."
+                }), 200
 
             elif request.method == "DELETE": 
                 cursor.execute(
@@ -214,6 +218,7 @@ def get_update_delete(id):
 
     except Exception as e:
         if conn: conn.rollback()
+        print(f"Error: {e}")
         return jsonify({
             "message": str(e)
         })
